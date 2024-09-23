@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <div style="background-color: #f0f0f0; padding: 10px; text-align: center;">
+        <a href="https://tal-entreprise.github.io/site/" target="_blank" style="font-size: 24px; font-weight: bold; text-decoration: none; color: #000;">
+          Visiter notre site ICI
+        </a>
+      </div>
+    <meta charset="UTF-8">
+    <title>Contrôle Micro:bit via USB</title>
+</head>
+<body>
+    <h1>Contrôle Micro:bit via USB</h1>
+    <button id="connect">Connecter la Micro:bit</button>
+    <br><br>
+    <input type="number" id="numberInput" min="0" max="9">
+    <button id="sendNumber">Envoyer le nombre</button>
+
+    <script>
+        let port;
+
+        document.getElementById('connect').addEventListener('click', async () => {
+            try {
+                port = await navigator.serial.requestPort();
+                await port.open({ baudRate: 115200 });
+                alert("Micro:bit connectée avec succès!");
+            } catch (err) {
+                console.error("Erreur de connexion:", err);
+                alert("Erreur lors de la connexion à la Micro:bit.");
+            }
+        });
+
+        document.getElementById('sendNumber').addEventListener('click', async () => {
+            if (!port) {
+                alert("Veuillez d'abord connecter la Micro:bit.");
+                return;
+            }
+
+            const number = document.getElementById('numberInput').value;
+            if (number === "" || isNaN(number) || number < 0 || number > 9) {
+                alert("Veuillez entrer un nombre valide entre 0 et 9.");
+                return;
+            }
+
+            try {
+                const writer = port.writable.getWriter();
+                const encoder = new TextEncoder();
+                await writer.write(encoder.encode(number + "\n"));
+                writer.releaseLock();
+                alert(`Le nombre ${number} a été envoyé à la Micro:bit.`);
+            } catch (err) {
+                console.error("Erreur lors de l'envoi:", err);
+                alert("Erreur lors de l'envoi du nombre à la Micro:bit.");
+            }
+        });
+    </script>
+</body>
+</html>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<p style="text-align: center;">créé avec ❤️ par Timéo</p>
+<p style="text-align: center;">© TAL tout droit résérvé</p>
